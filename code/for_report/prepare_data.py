@@ -1,12 +1,13 @@
 #!/usr/local/bin/python
-#!/usr/bin/python
+# !/usr/bin/python
+
 
 import numpy as np
 import pickle
 import os
-import matplotlib.pyplot as plt
 
-dataset = np.recfromcsv('/home/thomai/Dropbox/thesis_KTH_KI/python/dataset.csv')
+dataset =\
+    np.recfromcsv('/home/thomai/Dropbox/thesis_KTH_KI/python/dataset.csv')
 
 """ TAKE OUT FLAGGED SUBJECT! """
 flagged_idx = 1216
@@ -26,8 +27,8 @@ keys_area = ['bankssts', 'caudalanteriorcingulate', 'caudalmiddlefrontal',
              'pericalcarine', 'postcentral', 'posteriorcingulate',
              'precentral', 'precuneus', 'rostralanteriorcingulate',
              'rostralmiddlefrontal', 'superiorfrontal', 'superiorparietal',
-             'superiortemporal', 'supramarginal', 'frontalpole', 'temporalpole',
-             'transversetemporal', 'insula']
+             'superiortemporal', 'supramarginal', 'frontalpole',
+             'temporalpole', 'transversetemporal', 'insula']
 problem = False
 
 for key in keys_area:
@@ -35,7 +36,7 @@ for key in keys_area:
     test = np.where(check < 0)
     if np.any(test):
         problem = True
-        print("Problem with %s, in places: %s" %(key, test))
+        print("Problem with %s, in places: %s" % (key, test))
 
 if not problem:
     print("AREA FEATURES GOOD")
@@ -55,7 +56,7 @@ for key in keys_volume:
     test = np.where(check < 0)
     if np.any(test):
         problem = True
-        print("Problem with %s, in places: %s" %(key, test))
+        print("Problem with %s, in places: %s" % (key, test))
 
 if not problem:
     print("VOLUME FEATURES GOOD")
@@ -69,7 +70,7 @@ for key in keys_normalizer:
     test = np.where(check < 0)
     if np.any(test):
         problem = True
-        print("Problem with %s, in places: %s" %(key, test))
+        print("Problem with %s, in places: %s" % (key, test))
 
 if not problem:
     print("NORMALIZER GOOD")
@@ -100,7 +101,7 @@ for key in keys_diagnosis_strings:
         test = np.where(test_d == False)
     if np.any(test):
         problem = True
-        print("Problem with %s, in places: %s" %(key, test))
+        print("Problem with %s, in places: %s" % (key, test))
 if not problem:
     print("DIAGNOSIS STRINGS GOOD")
 else:
@@ -122,7 +123,7 @@ for key in keys_diagnosis_ints:
         test = np.where(test_d == False)
     if np.any(test):
         problem = True
-        print("Problem with %s, in places: %s" %(key, test))
+        print("Problem with %s, in places: %s" % (key, test))
 if not problem:
     print("DIAGNOSIS INTS GOOD")
 else:
@@ -233,14 +234,15 @@ for subject_idx, subject_sid in enumerate(subjects):
     for instance in np.arange(len(sid_idx)):
         for s in sid_idx:
             if tp_int[s] == instance:
-                if instance == 1 and dxcurrent[s[0]] == 1 and dxgroup[s[0]] == 2:
-                    print instance, dxcurrent[s[0]], dxgroup[s[0]], subject_sid
+                if instance == 1 and\
+                   dxcurrent[s[0]] == 1 and dxgroup[s[0]] == 2:
+                    print(instance, dxcurrent[s[0]], dxgroup[s[0]],
+                          subject_sid)
                 temp = np.hstack((area_feats[s[0]], vol_feats[s[0]]))
                 observations = np.vstack((observations, temp))
                 scan_group.append(dxcurrent[s[0]])
                 last_dx = dxcurrent[s[0]]
     subject_end_group.append(last_dx)
-
 
 
 lengths = np.array(lengths)
@@ -257,7 +259,8 @@ start = 0
 end = lengths[0]
 for i in range(len(lengths)):
     subject_idxs.append(start)
-    state_diagnosis = np.vstack((state_diagnosis, -np.ones((1, np.max(lengths)))))
+    state_diagnosis = np.vstack((state_diagnosis,
+                                 -np.ones((1, np.max(lengths)))))
     state_diagnosis[-1, :len(scan_group[start:end])] = scan_group[start:end]
     start += lengths[i]
     if i < len(lengths) - 1:
@@ -269,56 +272,135 @@ subject_idxs = np.array(subject_idxs)
 here = os.path.dirname(os.path.abspath(__file__))
 
 """ Print info """
-female = np.where(gender_per_subject == 0)
-male = np.where(gender_per_subject == 1)
+idx_hc = (subject_group == 0)
+idx_mci = (subject_group == 1)
+idx_ad = (subject_group == 2)
+CN_CN = np.sum(subject_end_group[idx_hc] == 0)
+CN_MCI = np.sum(subject_end_group[idx_hc] == 1)
+CN_AD = np.sum(subject_end_group[idx_hc] == 2)
+MCI_CN = np.sum(subject_end_group[idx_mci] == 0)
+MCI_MCI = np.sum(subject_end_group[idx_mci] == 1)
+MCI_AD = np.sum(subject_end_group[idx_mci] == 2)
+AD_CN = np.sum(subject_end_group[idx_ad] == 0)
+AD_MCI = np.sum(subject_end_group[idx_ad] == 1)
+AD_AD = np.sum(subject_end_group[idx_ad] == 2)
 
-print('Healthy group: %d' % (np.sum(subject_group == 0)))
-print('MCI group: %d' % (np.sum(subject_group == 1)))
-print('AD group: %d' % (np.sum(subject_group == 2)))
+print("CN_CN: %d" % CN_CN)
+print("CN_MCI: %d" % CN_MCI)
+print("CN_AD: %d" % CN_AD)
+print("MCI_CN: %d" % MCI_CN)
+print("MCI_MCI: %d" % MCI_MCI)
+print("MCI_AD: %d" % MCI_AD)
+print("AD_CN: %d" % AD_CN)
+print("AD_MCI: %d" % AD_MCI)
+print("AD_AD: %d" % AD_AD)
 
-print('Healthy end group: %d' % (np.sum(subject_end_group == 0)))
-print('MCI end group: %d' % (np.sum(subject_end_group == 1)))
-print('AD end group: %d' % (np.sum(subject_end_group == 2)))
+CN_1 = np.sum(lengths[idx_hc] == 2)
+CN_2 = np.sum(lengths[idx_hc] == 3)
+CN_3 = np.sum(lengths[idx_hc] == 4)
+MCI_1 = np.sum(lengths[idx_mci] == 2)
+MCI_2 = np.sum(lengths[idx_mci] == 3)
+MCI_3 = np.sum(lengths[idx_mci] == 4)
+AD_1 = np.sum(lengths[idx_ad] == 2)
+AD_2 = np.sum(lengths[idx_ad] == 3)
+AD_3 = np.sum(lengths[idx_ad] == 4)
 
-print('1 Follow-up: %d' %np.sum(lengths == 2))
-print('2 Follow-ups: %d' %np.sum(lengths == 3))
-print('3 Follow-ups: %d' %np.sum(lengths == 4))
+print("CN_1: %d" % CN_1)
+print("CN_2: %d" % CN_2)
+print("CN_3: %d" % CN_3)
+print("MCI_1: %d" % MCI_1)
+print("MCI_2: %d" % MCI_2)
+print("MCI_3: %d" % MCI_3)
+print("AD_1: %d" % AD_1)
+print("AD_2: %d" % AD_2)
+print("AD_3: %d" % AD_3)
 
-print('Age minimum total: %f' %np.min(age_per_subject))
-print('Age maximum total: %f' %np.max(age_per_subject))
+female_CN = np.where(gender_per_subject[idx_hc] == 0)
+female_MCI = np.where(gender_per_subject[idx_mci] == 0)
+female_AD = np.where(gender_per_subject[idx_ad] == 0)
+male_CN = np.where(gender_per_subject[idx_hc] == 1)
+male_MCI = np.where(gender_per_subject[idx_mci] == 1)
+male_AD = np.where(gender_per_subject[idx_ad] == 1)
 
-print('Females: %d' %np.sum(gender_per_subject == 0))
-print('Males: %d' %np.sum(gender_per_subject == 1))
+female_CN_ages = age_per_subject[female_CN]
+female_MCI_ages = age_per_subject[female_MCI]
+female_AD_ages = age_per_subject[female_AD]
+male_CN_ages = age_per_subject[male_CN]
+male_MCI_ages = age_per_subject[male_MCI]
+male_AD_ages = age_per_subject[male_AD]
 
-print('Female Healthy group: %d' % (np.sum(subject_group[female] == 0)))
-print('Female MCI group: %d' % (np.sum(subject_group[female] == 1)))
-print('Female AD group: %d' % (np.sum(subject_group[female] == 2)))
+female_CN_ages_std = np.std(female_CN_ages)
+female_MCI_ages_std = np.std(female_MCI_ages)
+female_AD_ages_std = np.std(female_AD_ages)
+male_CN_ages_std = np.std(male_CN_ages)
+male_MCI_ages_std = np.std(male_MCI_ages)
+male_AD_ages_std = np.std(male_AD_ages)
+female_CN_ages_mean = np.mean(female_CN_ages)
+female_MCI_ages_mean = np.mean(female_MCI_ages)
+female_AD_ages_mean = np.mean(female_AD_ages)
+male_CN_ages_mean = np.mean(male_CN_ages)
+male_MCI_ages_mean = np.mean(male_MCI_ages)
+male_AD_ages_mean = np.mean(male_AD_ages)
 
-print('Female Healthy end group: %d' % (np.sum(subject_end_group[female] == 0)))
-print('Female MCI end group: %d' % (np.sum(subject_end_group[female] == 1)))
-print('Female AD end group: %d' % (np.sum(subject_end_group[female] == 2)))
+print("female_CN_ages_std: %f, mean %f" % (female_CN_ages_std,
+                                           female_CN_ages_mean))
+print("female_MCI_ages_std: %f, mean %f" % (female_MCI_ages_std,
+                                            female_MCI_ages_mean))
+print("female_AD_ages_std: %f, mean %f" % (female_AD_ages_std,
+                                           female_AD_ages_mean))
+print("male_CN_ages_std: %f, mean %f" % (male_CN_ages_std, male_CN_ages_mean))
+print("male_MCI_ages_std: %f, mean %f" % (male_MCI_ages_std,
+                                          male_MCI_ages_mean))
+print("male_AD_ages_std: %f, mean %f" % (male_AD_ages_std, male_AD_ages_mean))
 
-print('Female 1 Follow-up: %d' %np.sum(lengths[female] == 2))
-print('Female 2 Follow-ups: %d' %np.sum(lengths[female] == 3))
-print('Female 3 Follow-ups: %d' %np.sum(lengths[female] == 4))
+# print('Healthy group: %d' % (np.sum(subject_group == 0)))
+# print('MCI group: %d' % (np.sum(subject_group == 1)))
+# print('AD group: %d' % (np.sum(subject_group == 2)))
 
-print('Female Age minimum total: %f' %np.min(age_per_subject[female]))
-print('Female Age maximum total: %f' %np.max(age_per_subject[female]))
+# print('Healthy end group: %d' % (np.sum(subject_end_group == 0)))
+# print('MCI end group: %d' % (np.sum(subject_end_group == 1)))
+# print('AD end group: %d' % (np.sum(subject_end_group == 2)))
 
-print('Male Healthy group: %d' % (np.sum(subject_group[male] == 0)))
-print('Male MCI group: %d' % (np.sum(subject_group[male] == 1)))
-print('Male AD group: %d' % (np.sum(subject_group[male] == 2)))
+# print('1 Follow-up: %d' % np.sum(lengths == 2))
+# print('2 Follow-ups: %d' % np.sum(lengths == 3))
+# print('3 Follow-ups: %d' % np.sum(lengths == 4))
 
-print('Male Healthy end group: %d' % (np.sum(subject_end_group[male] == 0)))
-print('Male MCI end group: %d' % (np.sum(subject_end_group[male] == 1)))
-print('Male AD end group: %d' % (np.sum(subject_end_group[male] == 2)))
+# print('Age minimum total: %f' % np.min(age_per_subject))
+# print('Age maximum total: %f' % np.max(age_per_subject))
 
-print('Male 1 Follow-up: %d' %np.sum(lengths[male] == 2))
-print('Male 2 Follow-ups: %d' %np.sum(lengths[male] == 3))
-print('Male 3 Follow-ups: %d' %np.sum(lengths[male] == 4))
+# print('Females: %d' % np.sum(gender_per_subject == 0))
+# print('Males: %d' % np.sum(gender_per_subject == 1))
 
-print('Male Age minimum total: %f' %np.min(age_per_subject[male]))
-print('Male Age maximum total: %f' %np.max(age_per_subject[male]))
+# print('Female Healthy group: %d' % (np.sum(subject_group[female] == 0)))
+# print('Female MCI group: %d' % (np.sum(subject_group[female] == 1)))
+# print('Female AD group: %d' % (np.sum(subject_group[female] == 2)))
+
+# print('Female Healthy end group: %d'
+#       % (np.sum(subject_end_group[female] == 0)))
+# print('Female MCI end group: %d' % (np.sum(subject_end_group[female] == 1)))
+# print('Female AD end group: %d' % (np.sum(subject_end_group[female] == 2)))
+
+# print('Female 1 Follow-up: %d' % np.sum(lengths[female] == 2))
+# print('Female 2 Follow-ups: %d' % np.sum(lengths[female] == 3))
+# print('Female 3 Follow-ups: %d' % np.sum(lengths[female] == 4))
+
+# print('Female Age minimum total: %f' % np.min(age_per_subject[female]))
+# print('Female Age maximum total: %f' % np.max(age_per_subject[female]))
+
+# print('Male Healthy group: %d' % (np.sum(subject_group[male] == 0)))
+# print('Male MCI group: %d' % (np.sum(subject_group[male] == 1)))
+# print('Male AD group: %d' % (np.sum(subject_group[male] == 2)))
+
+# print('Male Healthy end group: %d' % (np.sum(subject_end_group[male] == 0)))
+# print('Male MCI end group: %d' % (np.sum(subject_end_group[male] == 1)))
+# print('Male AD end group: %d' % (np.sum(subject_end_group[male] == 2)))
+
+# print('Male 1 Follow-up: %d' % np.sum(lengths[male] == 2))
+# print('Male 2 Follow-ups: %d' % np.sum(lengths[male] == 3))
+# print('Male 3 Follow-ups: %d' % np.sum(lengths[male] == 4))
+
+# print('Male Age minimum total: %f' % np.min(age_per_subject[male]))
+# print('Male Age maximum total: %f' % np.max(age_per_subject[male]))
 
 
 print("Sanity check..................... ")
