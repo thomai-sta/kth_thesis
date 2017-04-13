@@ -28,7 +28,7 @@ for i in range(6):
     specificity_3[i] = 0
 
 
-print("CV\t1 - fpr\t\ttpr\t\tdist\t\tAUC\t\t3FU\tStates")
+# print("CV\t1 - fpr\t\ttpr\t\tdist\t\tAUC\t\t3FU\tStates")
 
 """ Average Cross-Validation results """
 avg_fpr_CV = [0] * len(fpr_CV[0])

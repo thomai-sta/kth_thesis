@@ -25,7 +25,7 @@ if os.path.isfile(file_CV):
      tpr_3_CV, fold] = pickle.load(open(file_CV, "rb"), encoding='latin1')
 
 
-print("CV\tdor\t\tf1\t\t3FU")
+# print("CV\tdor\t\tf1\t\t3FU")
 
 """ Average Cross-Validation results """
 avg_sensitivity_CV = [0] * len(sensitivity_CV[0])
@@ -81,38 +81,58 @@ dor_CV_3 = [x * y / ((1 - x) * (1 - y)) for x, y in
 
 
 """ Plot Sensitivity/Specificity """
-min_sensitivity_1 = [0.7] * len(n_components)
-min_sensitivity_2 = [0.6] * len(n_components)
+min_sensitivity = [0.5] * len(n_components)
+min_specificity = [0.62] * len(n_components)
+min_f1 = [0.554] * len(n_components)
 
 # no CV
 plt.figure()
-plt.hold(True)
+ax = plt.subplot(111)
+ax.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 1])
+plt.plot(n_components, min_sensitivity, "--", label="Min. Sensitivity",
+         linewidth=2.0)
+plt.plot(n_components, min_specificity, "--", label="Min. Specificity",
+         linewidth=2.0)
+plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0)
 
-avg_dor = np.sum(dor) / len(dor)
-avg_f1 = np.sum(f1) / len(dor)
-print("NO\t%f\t%f\tNO" % (avg_dor, avg_f1))
+# avg_dor = np.sum(dor) / len(dor)
+# avg_f1 = np.sum(f1) / len(dor)
+# print("NO\t%f\t%f\tNO" % (avg_dor, avg_f1))
 
 plt.plot(n_components, sensitivity[n_components[0]:n_components[-1] + 1],
          label="Sensitivity", linewidth=2.0)
 plt.plot(n_components, specificity[n_components[0]:n_components[-1] + 1],
          label="Specificity", linewidth=2.0)
 plt.plot(n_components, f1, "o-", label="F1 Score", linewidth=2.0)
-plt.plot(n_components, min_sensitivity_1, "--", linewidth=2.0)
-plt.plot(n_components, min_sensitivity_2, "--", linewidth=2.0)
-plt.legend(loc=0)
-plt.grid()
+# Shrink current axis's height by 10% on the bottom
+box = ax.get_position()
+ax.set_position([box.x0, box.y0 + box.height * 0.2,
+                 box.width, box.height * 0.8])
+
+# Put a legend below current axis
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
+          fancybox=True, shadow=True, ncol=2)
+ax.grid()
 plt.xlabel('Number of States')
-plt.title("Method 1 without Cross-Validation")
+plt.title("Method 1 Blind Experiment")
 
 # CV
 plt.figure()
+ax = plt.subplot(111)
+ax.hold(True)
 plt.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 1])
+plt.plot(n_components, min_sensitivity, "--", label="Min. Sensitivity",
+         linewidth=2.0)
+plt.plot(n_components, min_specificity, "--", label="Min. Specificity",
+         linewidth=2.0)
+plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0)
 
-avg_dor = np.sum(dor_CV) / len(dor)
-avg_f1 = np.sum(f1_CV) / len(dor)
-print("YES\t%f\t%f\tNO" % (avg_dor, avg_f1))
+
+# avg_dor = np.sum(dor_CV) / len(dor)
+# avg_f1 = np.sum(f1_CV) / len(dor)
+# print("YES\t%f\t%f\tNO" % (avg_dor, avg_f1))
 
 plt.plot(n_components,
          avg_sensitivity_CV[n_components[0]:n_components[-1] + 1],
@@ -121,44 +141,66 @@ plt.plot(n_components,
          avg_specificity_CV[n_components[0]:n_components[-1] + 1],
          label="Specificity", linewidth=2.0)
 plt.plot(n_components, f1_CV, "o-", label="F1 Score", linewidth=2.0)
-plt.plot(n_components, min_sensitivity_1, "--", linewidth=2.0)
-plt.plot(n_components, min_sensitivity_2, "--", linewidth=2.0)
-plt.legend(loc=0)
-plt.grid()
+# Shrink current axis's height by 10% on the bottom
+box = ax.get_position()
+ax.set_position([box.x0, box.y0 + box.height * 0.2,
+                 box.width, box.height * 0.8])
+
+# Put a legend below current axis
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
+          fancybox=True, shadow=True, ncol=2)
+ax.grid()
 plt.xlabel('Number of States')
-plt.title("Method 1 with Cross-Validation")
+plt.title("Method 1 Semi-Blind Experiment")
 
 
 """ Plot Sensitivity/Specificity 3 Follow-Ups """
 # no CV
 plt.figure()
-plt.hold(True)
+ax = plt.subplot(111)
+ax.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 1])
+plt.plot(n_components, min_sensitivity, "--", label="Min. Sensitivity",
+         linewidth=2.0)
+plt.plot(n_components, min_specificity, "--", label="Min. Specificity",
+         linewidth=2.0)
+plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0)
 
-avg_dor = np.sum(dor_3) / len(dor)
-avg_f1 = np.sum(f1_3) / len(dor)
-print("NO\t%f\t%f\tYES" % (avg_dor, avg_f1))
+# avg_dor = np.sum(dor_3) / len(dor)
+# avg_f1 = np.sum(f1_3) / len(dor)
+# print("NO\t%f\t%f\tYES" % (avg_dor, avg_f1))
 
 plt.plot(n_components, sensitivity_3[n_components[0]:n_components[-1] + 1],
          label="Sensitivity", linewidth=2.0)
 plt.plot(n_components, specificity_3[n_components[0]:n_components[-1] + 1],
          label="Specificity", linewidth=2.0)
 plt.plot(n_components, f1_3, "o-", label="F1 Score", linewidth=2.0)
-plt.plot(n_components, min_sensitivity_1, "--", linewidth=2.0)
-plt.plot(n_components, min_sensitivity_2, "--", linewidth=2.0)
-plt.legend(loc=0)
-plt.grid()
+# Shrink current axis's height by 10% on the bottom
+box = ax.get_position()
+ax.set_position([box.x0, box.y0 + box.height * 0.2,
+                 box.width, box.height * 0.8])
+
+# Put a legend below current axis
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
+          fancybox=True, shadow=True, ncol=2)
+ax.grid()
 plt.xlabel('Number of States')
-plt.title("Method 1 without Cross-Validation 3 Follow-Ups")
+plt.title("Method 1 Blind Experiment 3 Follow-Ups")
 
 # CV
 plt.figure()
-plt.hold(True)
+ax = plt.subplot(111)
+ax.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 1])
+plt.plot(n_components, min_sensitivity, "--", label="Min. Sensitivity",
+         linewidth=2.0)
+plt.plot(n_components, min_specificity, "--", label="Min. Specificity",
+         linewidth=2.0)
+plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0)
 
-avg_dor = np.sum(dor_CV_3) / len(dor)
-avg_f1 = np.sum(f1_CV_3) / len(dor)
-print("YES\t%f\t%f\tYES" % (avg_dor, avg_f1))
+# avg_dor = np.sum(dor_CV_3) / len(dor)
+# avg_f1 = np.sum(f1_CV_3) / len(dor)
+# print("YES\t%f\t%f\tYES" % (avg_dor, avg_f1))
 
 plt.plot(n_components,
          avg_sensitivity_CV_3[n_components[0]:n_components[-1] + 1],
@@ -167,24 +209,31 @@ plt.plot(n_components,
          avg_specificity_CV_3[n_components[0]:n_components[-1] + 1],
          label="Specificity", linewidth=2.0)
 plt.plot(n_components, f1_CV_3, "o-", label="F1 Score", linewidth=2.0)
-plt.plot(n_components, min_sensitivity_1, "--", linewidth=2.0)
-plt.plot(n_components, min_sensitivity_2, "--", linewidth=2.0)
-plt.legend(loc=0)
-plt.grid()
+# Shrink current axis's height by 10% on the bottom
+box = ax.get_position()
+ax.set_position([box.x0, box.y0 + box.height * 0.2,
+                 box.width, box.height * 0.8])
+
+# Put a legend below current axis
+ax.legend(loc='upper center', bbox_to_anchor=(0.5, -0.1),
+          fancybox=True, shadow=True, ncol=2)
+ax.grid()
 plt.xlabel('Number of States')
-plt.title("Method 1 with Cross-Validation 3 Follow-Ups")
+plt.title("Method 1 Semi-Blind Experiment 3 Follow-Ups")
 
 
-""" Plot Sensitivity/Specificity """
-# no CV
+""" Plot DORs """
+min_dor = [1] * len(n_components)
+
 plt.figure()
 plt.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 10])
+plt.plot(n_components, min_dor, "--", label="Min. DOR", linewidth=2.0)
 
-plt.plot(n_components, dor, label="DOR", linewidth=2.0)
-plt.plot(n_components, dor_3, label="DOR 3 FU", linewidth=2.0)
-plt.plot(n_components, dor_CV, label="DOR with CV", linewidth=2.0)
-plt.plot(n_components, dor_CV_3, label="DOR with CV 3 FU", linewidth=2.0)
+plt.plot(n_components, dor, label="DOR Blind", linewidth=2.0)
+plt.plot(n_components, dor_3, label="DOR Blind 3 FU", linewidth=2.0)
+plt.plot(n_components, dor_CV, label="DOR Semi-Blind", linewidth=2.0)
+plt.plot(n_components, dor_CV_3, label="DOR Semi-Blind 3 FU", linewidth=2.0)
 plt.legend(loc=0)
 plt.grid()
 plt.xlabel('Number of States')
