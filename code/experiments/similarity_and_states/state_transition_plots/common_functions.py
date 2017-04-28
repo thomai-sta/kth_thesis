@@ -40,21 +40,21 @@ def setup_and_train(n_components, train_obs, train_len, cov_type, verbose, iter)
     return h
 
 
-def vote_states(sequences, test_len, n_components):
-    iterations = sequences.shape[1]
+# def vote_states(sequences, test_len, n_components):
+#     iterations = sequences.shape[1]
 
-    votes = -np.ones((len(test_len), n_components, np.max(test_len)))
-    print votes.shape
-    for i in np.arange(iterations):
-        state_seq = vec2mat(sequences[:, i], test_len)
-        for sub, seq in enumerate(state_seq):
-            for step in np.arange(test_len[sub]):
-                votes[sub, seq[step], step] += 1
+#     votes = -np.ones((len(test_len), n_components, np.max(test_len)))
+#     print votes.shape
+#     for i in np.arange(iterations):
+#         state_seq = vec2mat(sequences[:, i], test_len)
+#         for sub, seq in enumerate(state_seq):
+#             for step in np.arange(test_len[sub]):
+#                 votes[sub, seq[step], step] += 1
 
-    """ All have voted """
-    final_sequences = - np.ones((len(test_len), np.max(test_len)))
-    for sub in np.arange(len(test_len)):
-        temp = votes[sub, :, :test_len[sub]]
-        final_sequences[sub, :test_len[sub]] = np.argmax(temp, axis=0)
+#     """ All have voted """
+#     final_sequences = - np.ones((len(test_len), np.max(test_len)))
+#     for sub in np.arange(len(test_len)):
+#         temp = votes[sub, :, :test_len[sub]]
+#         final_sequences[sub, :test_len[sub]] = np.argmax(temp, axis=0)
 
-    return final_sequences
+#     return final_sequences

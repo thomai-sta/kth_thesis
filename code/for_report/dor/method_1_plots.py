@@ -8,8 +8,8 @@ import numpy as np
 
 plt.switch_backend('TkAgg')
 
-cmap = plt.get_cmap('jet')
-colors1 = cmap(np.linspace(0, 1.0, 9))
+cmap = plt.get_cmap('Paired')
+colors1 = cmap(np.linspace(0, 1.0, 12))
 
 """ Check if we already have the metrics file """
 file = "method_1.pickle"
@@ -91,10 +91,11 @@ ax = plt.subplot(111)
 ax.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 1])
 plt.plot(n_components, min_sensitivity, "--", label="Min. Sensitivity",
-         linewidth=2.0)
+         linewidth=2.0, color=colors1[1])
 plt.plot(n_components, min_specificity, "--", label="Min. Specificity",
-         linewidth=2.0)
-plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0)
+         linewidth=2.0, color=colors1[3])
+plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0,
+         color=colors1[5])
 
 # avg_dor = np.sum(dor) / len(dor)
 # avg_f1 = np.sum(f1) / len(dor)
@@ -124,10 +125,11 @@ ax.hold(True)
 plt.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 1])
 plt.plot(n_components, min_sensitivity, "--", label="Min. Sensitivity",
-         linewidth=2.0)
+         linewidth=2.0, color=colors1[1])
 plt.plot(n_components, min_specificity, "--", label="Min. Specificity",
-         linewidth=2.0)
-plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0)
+         linewidth=2.0, color=colors1[3])
+plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0,
+         color=colors1[5])
 
 
 # avg_dor = np.sum(dor_CV) / len(dor)
@@ -161,10 +163,11 @@ ax = plt.subplot(111)
 ax.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 1])
 plt.plot(n_components, min_sensitivity, "--", label="Min. Sensitivity",
-         linewidth=2.0)
+         linewidth=2.0, color=colors1[1])
 plt.plot(n_components, min_specificity, "--", label="Min. Specificity",
-         linewidth=2.0)
-plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0)
+         linewidth=2.0, color=colors1[3])
+plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0,
+         color=colors1[5])
 
 # avg_dor = np.sum(dor_3) / len(dor)
 # avg_f1 = np.sum(f1_3) / len(dor)
@@ -193,10 +196,11 @@ ax = plt.subplot(111)
 ax.hold(True)
 plt.axis([0, n_components[-1] + 1, 0, 1])
 plt.plot(n_components, min_sensitivity, "--", label="Min. Sensitivity",
-         linewidth=2.0)
+         linewidth=2.0, color=colors1[1])
 plt.plot(n_components, min_specificity, "--", label="Min. Specificity",
-         linewidth=2.0)
-plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0)
+         linewidth=2.0, color=colors1[3])
+plt.plot(n_components, min_f1, "--", label="Min. F1-Score", linewidth=2.0,
+         color=colors1[5])
 
 # avg_dor = np.sum(dor_CV_3) / len(dor)
 # avg_f1 = np.sum(f1_CV_3) / len(dor)
@@ -222,21 +226,21 @@ plt.xlabel('Number of States')
 plt.title("Method 1 Semi-Blind Experiment 3 Follow-Ups")
 
 
-""" Plot DORs """
-min_dor = [1] * len(n_components)
+# """ Plot DORs """
+# min_dor = [1] * len(n_components)
 
-plt.figure()
-plt.hold(True)
-plt.axis([0, n_components[-1] + 1, 0, 10])
-plt.plot(n_components, min_dor, "--", label="Min. DOR", linewidth=2.0)
+# plt.figure()
+# plt.hold(True)
+# plt.axis([0, n_components[-1] + 1, 0, 10])
+# plt.plot(n_components, min_dor, "--", label="Min. DOR", linewidth=2.0)
 
-plt.plot(n_components, dor, label="DOR Blind", linewidth=2.0)
-plt.plot(n_components, dor_3, label="DOR Blind 3 FU", linewidth=2.0)
-plt.plot(n_components, dor_CV, label="DOR Semi-Blind", linewidth=2.0)
-plt.plot(n_components, dor_CV_3, label="DOR Semi-Blind 3 FU", linewidth=2.0)
-plt.legend(loc=0)
-plt.grid()
-plt.xlabel('Number of States')
-plt.title("Method 1 Diagnostic odds ratio")
+# plt.plot(n_components, dor, label="DOR Blind", linewidth=2.0)
+# plt.plot(n_components, dor_3, label="DOR Blind 3 FU", linewidth=2.0)
+# plt.plot(n_components, dor_CV, label="DOR Semi-Blind", linewidth=2.0)
+# plt.plot(n_components, dor_CV_3, label="DOR Semi-Blind 3 FU", linewidth=2.0)
+# plt.legend(loc=0)
+# plt.grid()
+# plt.xlabel('Number of States')
+# plt.title("Method 1 Diagnostic odds ratio")
 
 plt.show()

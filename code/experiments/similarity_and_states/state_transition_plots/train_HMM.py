@@ -17,7 +17,7 @@ def make_data():
     here = os.path.dirname(os.path.abspath(__file__))
     with open(os.path.join(here, "data/for_hmm.pickle"), "rb") as f:
         [observations, lengths, subject_group, subject_end_group, _, _,
-         subject_idxs] = pickle.load(f)
+         subject_idxs] = pickle.load(f, encoding='latin1')
 
     labels = subject_end_group
     labels[labels == 1] = 0
@@ -38,8 +38,8 @@ def make_data():
     return train_obs, train_len, observations, lengths, labels, groups
 
 
-def train_HMM(n_comp, train_obs, train_len, observations, lengths, verbose=True,
-              cov_type='spherical', iter=500):
+def train_HMM(n_comp, train_obs, train_len, observations, lengths,
+              verbose=True, cov_type='spherical', iter=500):
     h0 = cf.setup_and_train(n_comp, train_obs, train_len, cov_type,
                             verbose, iter)
 
@@ -47,4 +47,3 @@ def train_HMM(n_comp, train_obs, train_len, observations, lengths, verbose=True,
     seq = cf.vec2mat(sequences, lengths)
 
     return seq
-

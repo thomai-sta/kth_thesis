@@ -6,7 +6,6 @@ import numpy as np
 import train_HMM
 import pickle
 import os
-from matplotlib import pyplot as plt
 import metrics
 from sklearn.cross_validation import StratifiedKFold
 from common_functions import iter_from_X_lengths
